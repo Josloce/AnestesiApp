@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>AnestesiApp</title>
+    <meta name="description" content="Escalas y protocolos de anestesia offline" />
+    <meta name="theme-color" content="#0ea5e9" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="AnestesiApp" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <script>
+      // Fix for "Cannot set property fetch of #<Window> which has only a getter"
+      // This happens when global fetch is read-only (like in some sandboxed environments)
+      // and a library tries to polyfill or monkey-patch it.
+      (function() {
+        try {
+          var originalFetch = window.fetch;
+          if (originalFetch) {
+            Object.defineProperty(window, 'fetch', {
+              configurable: true,
+              enumerable: true,
+              get: function() { return originalFetch; },
+              set: function() { console.warn('Blocked attempt to override window.fetch'); }
+            });
+          }
+        } catch (e) {
+          // If we can't redefine it, it might already be locked or we're in a very restricted environment
+          console.debug('window.fetch safety patch skipped or failed', e);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
